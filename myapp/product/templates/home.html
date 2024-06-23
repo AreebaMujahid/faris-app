@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %}
+<form action="">
+    <div class="mb-3">
+        <label class="form-label">Search for Products by Name:</label>
+        <input type="text" name="searchProduct" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">
+        Search
+    </button>
+</form>
+<p>Searching by Name for: <b>{{ searchTerm }}</b> | Found: <b>{{ nproduct }} items</b></p>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card">
+            
+
+            {% if product.image %}
+            <img class="card-img-top" src="{{ product.image.url }}" alt="Product Image"/>
+            {% elif product.url %}
+            <img class="card-img-top" src="{{ product.url }}" alt="Product Image"/>
+            {% else %}
+            <img class="card-img-top" src="{% static 'default_image.jpg' %}" alt="Default Image"/>
+            {% endif %} 
+            <div class="card-body">
+                <a href="{% url 'detail' product.id %}">
+                    <h5 class="card-title fw-bold">{{ product.name }}</h5>
+                </a>
+                
+                <p class="card-text">
+                    {{ product.description }}
+                    <a target="_blank" href="{{ product.url }}">More...</a>
+                </p>
+                <b>Price:</b> {{ product.price }} AUD | <b>Availability:</b> {{ product.availability }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %} 

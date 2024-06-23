@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content%}
+<head>
+    <meta name="viewport" content="width=device-width , initial-scale=1">
+    <style>
+        * {box-sizing : border-box;}
+        .column {float:left ; width:50%; padding: 10px}
+        .row:after {content: "" ; display:table ; clear:both;}
+    </style>
+</head>
+
+<h1>Checkout</h1>
+<div class="row">
+  <div class="column">
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">
+            Place order
+        </button>
+    </form>
+</div>
+<div class="column">
+    <h3 align="right">Your order </h3>
+    <p style="text-align: right">
+        <ul style="list-style-type:none ; text-align:right;">
+        {% for item in cart %}
+           <li>
+                {{item.quantity}} * {{item.product.name}}:
+                {{item.total_price}} AUD
+           </li>
+        {% endfor %}
+        </ul>
+    </p>
+    <h4 align="right"> Total: {{cart.get_total_price}} AUD </h4>
+</div>
+
+
+          
+</div>
+{%endblock%}
+

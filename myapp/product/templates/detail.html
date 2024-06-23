@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class=" card mb-3">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="{{product.image.url}}" class="img-fluid rounded-start" alt=""
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{product.name}}</h5>
+                <p class="card-text">
+                    {{product.description}}
+                    <a target="_blank" href="{{product.url}}">More...</a>
+                </p>
+                <p>
+                    <b>Price:</b> {{product.price}} AUD <b>Availability:</b> {{product.availability}}
+                </p>
+                <p>
+                    <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                        {{cart_product_form}}
+                        {%csrf_token%}
+                        <input type="submit" value="Add to cart" class="btn btn-primary">
+                    </form>
+
+
+                </p>
+
+                <p>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'createreview' product.id %}"
+                       class="btn btn-primary">
+                        Add Review
+                    </a>
+                    {% else %}
+                     <p style="color:red"> To add review, please log-in
+                          <a style="color:red;" href="{% url 'login'%}">here</a>
+                     </p>
+                     {% endif %}
+               </p>
+               <hr />
+               <h3>Reviews</h3>
+               <ul class="list-group">
+                {% for review in reviews%}
+                  <li class="list-group-item pb-3 pt-3">
+                      <h5 class="card-title">
+                        By {{review.user.username}}
+                      </h5>
+                      <h6 class="card-subtitle mb-2 text-muted">
+                        {{review.date}}
+                      </h6>
+                    </li>
+                {%endfor%}
+                {% if user.is_authenticated and user == review.user%}
+                  <a class="btn btn-danger"
+                     href="{% url 'deletereview' review.id %}">
+                     Delete
+                  </a>
+                {% endif %}
+                  
+
+               </ul>
+
+
+               
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content%}
